@@ -156,4 +156,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void closeDatabase(){
+        database.close();
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDatabase();
+    }
 }
