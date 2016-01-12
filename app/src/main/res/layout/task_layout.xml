@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_delete"
+        android:paddingRight="10sp"
+        android:id="@+id/removeButton"
+        android:onClick="onClickRemoveButton"/>
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_menu_edit"
+        android:id="@+id/editButton"
+        android:scaleType="fitCenter"
+        android:onClick=""/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textSize="30sp"
+        android:paddingRight="10sp"
+        android:id="@+id/taskNumber" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textSize="30sp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:id="@+id/taskBody" />
+
+</LinearLayout>
