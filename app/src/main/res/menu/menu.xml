@@ -1,6 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_add_new_task"
+        android:title="Add new task"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_test_tasks"
+        android:title="Add test tasks"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_export_tasks"
+        android:title="Export tasks to sdcard"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_clear_tasks"
+        android:title="Clear all tasks"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

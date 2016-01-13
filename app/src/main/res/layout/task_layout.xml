@@ -5,28 +5,21 @@
     android:orientation="horizontal"
     android:weightSum="1">
 
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_delete"
-        android:paddingRight="10sp"
-        android:id="@+id/removeButton"
-        android:onClick="onClickRemoveButton"/>
-
-    <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_menu_edit"
-        android:id="@+id/editButton"
-        android:scaleType="fitCenter"
-        android:onClick=""/>
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/doneButton"
+        android:onClick="onDoneButtonClick"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
-        android:textSize="30sp"
-        android:paddingRight="10sp"
+        android:textSize="1sp"
+        android:paddingRight="5sp"
+        android:visibility="invisible"
         android:id="@+id/taskNumber" />
 
     <TextView
@@ -35,7 +28,8 @@
         android:text="New Text"
         android:textSize="30sp"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:id="@+id/taskBody" />
+        android:singleLine="false"
+        android:id="@+id/taskBody"
+        android:onClick="onTaskTextClicked"/>
 
 </LinearLayout>

@@ -9,57 +9,56 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.bazarnik.rafal.remembermeapp.MainActivity">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/addTask"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Add task..."
-        android:layout_toLeftOf="@+id/addTaskButton"
-        android:layout_toStartOf="@+id/addTaskButton" />
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/addTask"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:hint="Add task..."-->
+        <!--android:layout_toLeftOf="@+id/addTaskButton"-->
+        <!--android:layout_toStartOf="@+id/addTaskButton" />-->
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add"
-        android:id="@+id/addTaskButton"
-        android:layout_alignBottom="@+id/addTask"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="onClickAddTaskButton"/>
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Add"-->
+        <!--android:id="@+id/addTaskButton"-->
+        <!--android:layout_alignBottom="@+id/addTask"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:onClick="onClickAddTaskButton"/>-->
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Clear All Tasks"
-        android:id="@+id/clearAllTasksButton"
-        android:layout_below="@+id/addTask"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/addTestTasks"
-        android:layout_toStartOf="@+id/addTestTasks"
-        android:onClick="onClickClearTasks"/>
+    <!--<Button-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Clear All Tasks"-->
+        <!--android:id="@+id/clearAllTasksButton"-->
+        <!--android:layout_below="@+id/addTask"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_toLeftOf="@+id/addTestTasks"-->
+        <!--android:layout_toStartOf="@+id/addTestTasks"-->
+        <!--android:onClick="onClickClearTasks"/>-->
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tasksListView"
-        android:layout_below="@+id/clearAllTasksButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Test Tasks"
-        android:id="@+id/addTestTasks"
-        android:layout_alignBottom="@+id/clearAllTasksButton"
-        android:layout_alignRight="@+id/tasksListView"
-        android:layout_alignEnd="@+id/tasksListView"
-        android:onClick="onCLickCreateTestData"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Add Test Tasks"-->
+        <!--android:id="@+id/addTestTasks"-->
+        <!--android:layout_alignBottom="@+id/clearAllTasksButton"-->
+        <!--android:layout_alignRight="@+id/tasksListView"-->
+        <!--android:layout_alignEnd="@+id/tasksListView"-->
+        <!--android:onClick="onCLickCreateTestData"/>-->
 </RelativeLayout>
