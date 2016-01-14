@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Environment;
 
 import com.example.bazarnik.rafal.remembermeapp.model.DatabaseHelper;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
@@ -107,8 +110,35 @@ public class DatabaseAdapter {
         crsr.close();
     }
 
+    public void deleteAllUndone() {
+        String deleteDoneQuery = String.format("DELETE FROM %s WHERE %s=0", DATABASE_TABLE, KEY_STATE);
+        try {
+            database.execSQL(deleteDoneQuery);
+        }
+        catch (SQLiteException e) {
+        }
+    }
+
     public Cursor getAllRows() {
         String queryWhere = null;
+        Cursor crsr = database.query(true, DATABASE_TABLE, ALL_KEYS, queryWhere, null, null, null, null, null);
+        if (crsr != null) {
+            crsr.moveToFirst();
+        }
+        return crsr;
+    }
+
+    public Cursor getAllUndoneRows() {
+        String queryWhere = KEY_STATE + "=" + 0;
+        Cursor crsr = database.query(true, DATABASE_TABLE, ALL_KEYS, queryWhere, null, null, null, null, null);
+        if (crsr != null) {
+            crsr.moveToFirst();
+        }
+        return crsr;
+    }
+
+    public Cursor getAllDoneRows() {
+        String queryWhere = KEY_STATE + "=" + 1;
         Cursor crsr = database.query(true, DATABASE_TABLE, ALL_KEYS, queryWhere, null, null, null, null, null);
         if (crsr != null) {
             crsr.moveToFirst();
@@ -139,32 +169,35 @@ public class DatabaseAdapter {
 
     public boolean saveToFile() {
         try {
+            String timestamp = Long.toString(System.currentTimeMillis());
             String separator = System.getProperty("line.separator");
-            String filepath = String.format("/sdcard/tasks_database_dump_%s.txt", currentDateTimeString);
-            File myFile = new File(filepath);
+            String filename = String.format("tasks_database_dump_%s.txt", timestamp);
+            File myFile = new File(Environment.getExternalStorageDirectory(), filename);
+            String state = Environment.getExternalStorageState();
+            String line = "";
             myFile.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
             Cursor cursor = getAllRows();
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    String line = "";
                     line += Long.toString(cursor.getInt(0)) + ", ";
                     line += cursor.getString(1);
                     line += cursor.getString(2);
                     line += Integer.toString(cursor.getInt(3));
                     line += cursor.getString(4);
                     line += Integer.toString(cursor.getInt(5));
-                    myOutWriter.append(line);
-                    myOutWriter.append(separator);
+                    line += separator;
                 }
-
             }
-            myOutWriter.close();
-            fOut.close();
+            byte[] data = line.getBytes();
+            FileOutputStream fos;
+            fos = new FileOutputStream(myFile);
+            fos.write(data);
+            fos.flush();
+            fos.close();
             return true;
         }
         catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
