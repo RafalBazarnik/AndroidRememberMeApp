@@ -9,10 +9,13 @@ import android.os.Environment;
 
 import com.example.bazarnik.rafal.remembermeapp.model.DatabaseHelper;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.util.Date;
@@ -34,14 +37,23 @@ public class DatabaseAdapter {
     public static final String KEY_STATE = "state";
     public static final String KEY_DEADLINE = "deadline";
     public static final String KEY_PRIORITY = "priority";
+    public static final String KEY_ATTACHEMENT_1 = "attachement_1";
+    public static final String KEY_ATTACHEMENT_2 = "attachement_2";
+    public static final String KEY_ATTACHEMENT_3 = "attachement_3";
+
     //TODO: add task_date, priority, done/status, attachement
-    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_TASK, KEY_DATE, KEY_STATE, KEY_DEADLINE, KEY_PRIORITY};
+    public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_TASK, KEY_DATE, KEY_STATE,
+            KEY_DEADLINE, KEY_PRIORITY, KEY_ATTACHEMENT_1, KEY_ATTACHEMENT_2, KEY_ATTACHEMENT_3};
     public static final int COLUMN_ROWID = 0;
     public static final int COLUMN_TASK = 1;
     public static final int COLUMN_DATE = 2;
     public static final int COLUMN_STATE = 3;
     public static final int COLUMN_DEADLINE = 4;
     public static final int COLUMN_PRIORITY = 5;
+    // consider: blob and keep images/files or only links to sdcard?
+    public static final int COLUMN_ATTACHEMENT_1 = 6;
+    public static final int COLUMN_ATTACHEMENT_2 = 7;
+    public static final int COLUMN_ATTACHEMENT_3 = 8;
 
     public static final String CREATE_SQL_QUERY =
             String.format("CREATE TABLE %s (" +
@@ -174,26 +186,36 @@ public class DatabaseAdapter {
             String filename = String.format("tasks_database_dump_%s.txt", timestamp);
             File myFile = new File(Environment.getExternalStorageDirectory(), filename);
             String state = Environment.getExternalStorageState();
-            String line = "";
+            StringBuilder line = new StringBuilder();
             myFile.createNewFile();
             Cursor cursor = getAllRows();
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    line += Long.toString(cursor.getInt(0)) + ", ";
-                    line += cursor.getString(1);
-                    line += cursor.getString(2);
-                    line += Integer.toString(cursor.getInt(3));
-                    line += cursor.getString(4);
-                    line += Integer.toString(cursor.getInt(5));
-                    line += separator;
+                    line.append(Long.toString(cursor.getInt(0)));
+                    line.append(";");
+                    line.append(";");
+                    line.append(cursor.getString(1));
+                    line.append(";");
+                    line.append(cursor.getString(2));
+                    line.append(";");
+                    line.append(Integer.toString(cursor.getInt(3)));
+                    line.append(";");
+                    line.append(cursor.getString(4));
+                    line.append(";");
+                    line.append(Integer.toString(cursor.getInt(5)));
+                    line.append(separator);
                 }
             }
-            byte[] data = line.getBytes();
-            FileOutputStream fos;
-            fos = new FileOutputStream(myFile);
-            fos.write(data);
-            fos.flush();
-            fos.close();
+//            byte[] data = line.toString().getBytes();
+//            FileOutputStream fos;
+//            fos = new FileOutputStream(myFile);
+//            fos.write(data);
+//            fos.flush();
+//            fos.close();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(myFile));
+            writer.write(line.toString());
+            writer.flush();
+            writer.close();
             return true;
         }
         catch (Exception e) {
