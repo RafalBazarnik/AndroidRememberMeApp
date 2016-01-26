@@ -1,5 +1,6 @@
 package com.example.bazarnik.rafal.remembermeapp;
 
+import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.graphics.Color;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -38,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     LinearLayout linearTask;
     String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+    String sortBy = null;
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -48,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         linearTask = (LinearLayout) findViewById(R.id.linearTask);
 
         openDatabase();
-        fillListView();
+        fillListView(sortBy);
     }
 
 
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 database.insertRow(taskInput.getText().toString(), currentDateTimeString,
                                         0, currentDateTimeString, taskPriority);
-                                fillListView();
+                                fillListView(sortBy);
                                 Toast.makeText(getApplicationContext(), "New task added!", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Task cannot be empty!", Toast.LENGTH_SHORT).show();
@@ -125,8 +130,23 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_test_tasks:
                 database.addTestTasks();
-                fillListView();
+                fillListView(sortBy);
                 Toast.makeText(getApplicationContext(), "Test tasks added!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sort_priority:
+                sortBy = "priority DESC";
+                fillListView(sortBy);
+                Toast.makeText(getApplicationContext(), "Sorted!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sort_alphabetically:
+                sortBy = "task ASC";
+                fillListView(sortBy);
+                Toast.makeText(getApplicationContext(), "Sorted!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.sort_date_added:
+                sortBy = "date ASC";
+                fillListView(sortBy);
+                Toast.makeText(getApplicationContext(), "Sorted!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_export_tasks:
                 Boolean result = database.saveToFile();
@@ -138,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.action_show_done_tasks:
-                Intent intent = new Intent(MainActivity.this, DoneTaskListActivity.class);
-                startActivity(intent);
+                Intent intentDoneTasks = new Intent(MainActivity.this, DoneTaskListActivity.class);
+                startActivity(intentDoneTasks);
                 break;
             case R.id.action_clear_tasks:
                 final AlertDialog.Builder deleteAlert = new AlertDialog.Builder(context);
@@ -149,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         database.deleteAllUndone();
-                        fillListView();
+                        fillListView(sortBy);
                         Toast.makeText(getApplicationContext(), "Not done tasks list cleared!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -163,6 +183,10 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog clearDialog = deleteAlert.create();
                 clearDialog.show();
                 break;
+            case R.id.action_qr_code:
+                Intent intentQRCode = new Intent(MainActivity.this, QRCodeActivity.class);
+                startActivity(intentQRCode);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -173,27 +197,48 @@ public class MainActivity extends AppCompatActivity {
         database.open();
     }
 
-    private void fillListView() {
-        Cursor cursor = database.getAllUndoneRows();
+    private void fillListView(String sortBy) {
+        Cursor cursor = database.getAllUndoneRows(sortBy);
 
-        String[] fields = new String[] {DatabaseAdapter.KEY_ROWID, DatabaseAdapter.KEY_TASK};
-        int[] viewIds = new int[] {R.id.taskNumber, R.id.taskBody};
+        String[] fields = new String[] {DatabaseAdapter.KEY_PRIORITY, DatabaseAdapter.KEY_ROWID, DatabaseAdapter.KEY_TASK};
+        int[] viewIds = new int[] {R.id.taskpriority, R.id.taskNumber, R.id.taskBody};
 
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getBaseContext(),
+        MyCursorAdapter cursorAdapter = new MyCursorAdapter(getBaseContext(),
                 R.layout.task_layout, cursor, fields, viewIds, 0);
         listView.setAdapter(cursorAdapter);
+
     }
 
-    public void onDoneButtonClick(View view) {
-        View v = (View) view.getParent();
-        TextView idTextView = (TextView) v.findViewById(R.id.taskNumber);
-        TextView bodyTextView = (TextView) v.findViewById(R.id.taskBody);
-        long id = (long) Integer.parseInt(idTextView.getText().toString().trim());
-        database.setTaskRowStatus(id, 1);
-        fillListView();
+    private class MyCursorAdapter extends SimpleCursorAdapter{
+
+        public MyCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View view = super.getView(position, convertView, parent);
+            if(position % 2 == 0){
+                view.setBackgroundColor(Color.rgb(238, 233, 233));
+            }
+            else {
+                view.setBackgroundColor(Color.rgb(255, 255, 255));
+            }
+            return view;
+        }
+
+
     }
 
-
+//    public void onDoneButtonClick(View view) {
+//        View v = (View) view.getParent();
+//        TextView idTextView = (TextView) v.findViewById(R.id.taskNumber);
+//        TextView bodyTextView = (TextView) v.findViewById(R.id.taskBody);
+//        long id = (long) Integer.parseInt(idTextView.getText().toString().trim());
+//        database.setTaskRowStatus(id, 1);
+//        fillListView(sortBy);
+//    }
 
     public void onTaskTextClicked(View view) {
         View v = (View) view.getParent();
@@ -220,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fillListView();
+        fillListView(sortBy);
     }
 
     protected void onDestroy() {

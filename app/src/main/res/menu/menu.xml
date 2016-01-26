@@ -9,6 +9,19 @@
         android:title="Add test tasks"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item android:id="@+id/action_sort_tasks"
+        android:title="Sort tasks ..."
+        android:orderInCategory="100"
+        app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/sort_priority"
+                android:title="by priority" />
+            <item android:id="@+id/sort_alphabetically"
+                android:title="alphabetically" />
+            <item android:id="@+id/sort_date_added"
+                android:title="by add date" />
+        </menu>
+    </item>
     <item android:id="@+id/action_export_tasks"
         android:title="Export tasks to sdcard"
         android:orderInCategory="100"
@@ -19,6 +32,10 @@
         app:showAsAction="never" />
     <item android:id="@+id/action_clear_tasks"
         android:title="Clear all tasks"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_qr_code"
+        android:title="Scan QR Code"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

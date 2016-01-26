@@ -98,6 +98,9 @@ public class DetailViewActivity extends AppCompatActivity implements View.OnClic
 
         switch (id) {
             case R.id.detail_mark_done:
+                long taskId_temp = (long) Integer.parseInt(idText.getText().toString().trim());
+                database.setTaskRowStatus(taskId_temp, 1);
+                this.finish();
                 Toast.makeText(getBaseContext(), "Marked as done!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.detail_edit:
@@ -177,6 +180,14 @@ public class DetailViewActivity extends AppCompatActivity implements View.OnClic
         String text = task_body;
         speakIt(text);
     }
+
+    public void onDoneButtonClick(View v) {
+        TextView idTextView = (TextView) v.findViewById(R.id.taskNumber);
+        long id = (long) Integer.parseInt(idText.getText().toString().trim());
+        database.setTaskRowStatus(id, 1);
+        this.finish();
+    }
+
 
     public void onInit(int initStatus) {
 

@@ -37,13 +37,13 @@ public class DatabaseAdapter {
     public static final String KEY_STATE = "state";
     public static final String KEY_DEADLINE = "deadline";
     public static final String KEY_PRIORITY = "priority";
-    public static final String KEY_ATTACHEMENT_1 = "attachement_1";
-    public static final String KEY_ATTACHEMENT_2 = "attachement_2";
-    public static final String KEY_ATTACHEMENT_3 = "attachement_3";
+//    public static final String KEY_ATTACHEMENT_1 = "attachement_1";
+//    public static final String KEY_ATTACHEMENT_2 = "attachement_2";
+//    public static final String KEY_ATTACHEMENT_3 = "attachement_3";
 
     //TODO: add task_date, priority, done/status, attachement
     public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_TASK, KEY_DATE, KEY_STATE,
-            KEY_DEADLINE, KEY_PRIORITY, KEY_ATTACHEMENT_1, KEY_ATTACHEMENT_2, KEY_ATTACHEMENT_3};
+            KEY_DEADLINE, KEY_PRIORITY};
     public static final int COLUMN_ROWID = 0;
     public static final int COLUMN_TASK = 1;
     public static final int COLUMN_DATE = 2;
@@ -51,9 +51,9 @@ public class DatabaseAdapter {
     public static final int COLUMN_DEADLINE = 4;
     public static final int COLUMN_PRIORITY = 5;
     // consider: blob and keep images/files or only links to sdcard?
-    public static final int COLUMN_ATTACHEMENT_1 = 6;
-    public static final int COLUMN_ATTACHEMENT_2 = 7;
-    public static final int COLUMN_ATTACHEMENT_3 = 8;
+//    public static final int COLUMN_ATTACHEMENT_1 = 6;
+//    public static final int COLUMN_ATTACHEMENT_2 = 7;
+//    public static final int COLUMN_ATTACHEMENT_3 = 8;
 
     public static final String CREATE_SQL_QUERY =
             String.format("CREATE TABLE %s (" +
@@ -140,9 +140,9 @@ public class DatabaseAdapter {
         return crsr;
     }
 
-    public Cursor getAllUndoneRows() {
+    public Cursor getAllUndoneRows(String sortBy) {
         String queryWhere = KEY_STATE + "=" + 0;
-        Cursor crsr = database.query(true, DATABASE_TABLE, ALL_KEYS, queryWhere, null, null, null, null, null);
+        Cursor crsr = database.query(true, DATABASE_TABLE, ALL_KEYS, queryWhere, null, null, null, sortBy, null);
         if (crsr != null) {
             crsr.moveToFirst();
         }
