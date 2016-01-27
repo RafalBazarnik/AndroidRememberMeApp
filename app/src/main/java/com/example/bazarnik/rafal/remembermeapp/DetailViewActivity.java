@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -57,6 +58,10 @@ public class DetailViewActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_layout);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         idText = (TextView) findViewById(R.id.detail_id);
         taskText = (TextView) findViewById(R.id.detail_task);
@@ -97,6 +102,9 @@ public class DetailViewActivity extends AppCompatActivity implements View.OnClic
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             case R.id.detail_mark_done:
                 long taskId_temp = (long) Integer.parseInt(idText.getText().toString().trim());
                 database.setTaskRowStatus(taskId_temp, 1);
